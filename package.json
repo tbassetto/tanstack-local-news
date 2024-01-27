@@ -10,8 +10,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@tanstack/react-router": "^1.6.0",
-    "@tanstack/router-devtools": "^1.6.0",
+    "@tanstack/react-router": "^1.13.0",
+    "@tanstack/router-devtools": "^1.13.0",
     "hoofd": "^1.7.1",
     "ky": "^1.2.0",
     "query-string": "^8.1.0",
@@ -19,11 +19,11 @@
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
-    "@tanstack/router-vite-plugin": "^1.6.0",
+    "@tanstack/router-vite-plugin": "^1.12.16",
     "@types/react": "^18.2.48",
     "@types/react-dom": "^18.2.18",
-    "@typescript-eslint/eslint-plugin": "^6.19.0",
-    "@typescript-eslint/parser": "^6.19.0",
+    "@typescript-eslint/eslint-plugin": "^6.19.1",
+    "@typescript-eslint/parser": "^6.19.1",
     "@vitejs/plugin-react": "^4.2.1",
     "eslint": "^8.56.0",
     "eslint-plugin-react-hooks": "^4.6.0",

@@ -3,7 +3,7 @@ import ky from "ky";
 const api = ky.create({ prefixUrl: "https://jsonplaceholder.typicode.com/" });
 
 interface User {
-  id: string;
+  id: number;
   name: string;
   username: string;
   email: string;

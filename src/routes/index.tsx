@@ -1,9 +1,6 @@
-import { FileRoute, Link, useNavigate } from "@tanstack/react-router";
-import {
-  fetchPosts,
-  fetchUsers
-} from "../lib/api";
+import { Link, createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useTitle } from "hoofd";
+import { fetchPosts, fetchUsers } from "../lib/api";
 
 type HomeSearch = {
   users?: string[];
@@ -17,22 +14,23 @@ const isValidSortBy = (sortBy: unknown): sortBy is SortBy => {
   return typeof sortBy == "string" && sortByOptions.includes(sortBy);
 };
 
-export const Route = new FileRoute('/').createRoute({
+export const Route = createFileRoute("/")({
   component: Home,
   validateSearch: (search: Record<string, unknown>): HomeSearch => {
     return {
-      users: Array.isArray(search.users) ? search.users : [],
+      users: Array.isArray(search.users)
+        ? search.users
+        : search.users
+          ? [search.users]
+          : undefined,
       query: typeof search.query == "string" ? search.query : undefined,
       sortBy: isValidSortBy(search.sort) ? search.sort : undefined,
     };
   },
   loaderDeps: ({ search: { users } }) => ({ users }),
-  loader: async ({deps: {users}}) => {
-    const userIds =  (users || []).map((id) => Number(id));
-    return Promise.all([
-      fetchPosts({ userIds }),
-      fetchUsers(),
-    ]);
+  loader: async ({ deps: { users } }) => {
+    const userIds = (users || []).map((id) => Number(id));
+    return Promise.all([fetchPosts({ userIds }), fetchUsers()]);
   },
 });
 function Home() {
@@ -50,16 +48,13 @@ function Home() {
               <input
                 className="form-check-input"
                 type="checkbox"
-                checked={search.users?.includes(user.id)}
+                checked={!!search.users?.includes(String(user.id))}
                 onChange={(e) => {
                   if (e.target.checked) {
                     navigate({
                       to: Route.to,
                       search: {
-                        users: [
-                          ...(search.users || []),
-                          user.id,
-                        ],
+                        users: [...(search.users || []), String(user.id)],
                       },
                     });
                   } else {
@@ -67,16 +62,19 @@ function Home() {
                       to: Route.to,
                       search: {
                         users: (search.users || []).filter(
-                          (c) => c != user.id
+                          (c) => c != String(user.id)
                         ),
                       },
                     });
                   }
                 }}
-                id={user.id}
+                id={String(user.id)}
               />
-              <label className="form-check-label" htmlFor={user.id}>
-                {user.name} <span className="badge rounded-pill bg-light text-dark">#{user.id}</span>
+              <label className="form-check-label" htmlFor={String(user.id)}>
+                {user.name}{" "}
+                <span className="badge rounded-pill bg-light text-dark">
+                  #{user.id}
+                </span>
               </label>
             </div>
           );
@@ -90,12 +88,20 @@ function Home() {
               <Link to="/$slug" params={{ slug: String(post.id) }}>
                 {post.title}
               </Link>
-              <span className="badge rounded-pill bg-light text-dark">userId: {post.userId}</span>
+              <span className="badge rounded-pill bg-light text-dark">
+                userId: {post.userId}
+              </span>
             </li>
           ))}
         </ul>
-        <p><em>TODO: add search input tied to the <code>query</code> search param.</em></p>
-        <p><em>TODO: add pagination</em></p>
+        <p>
+          <em>
+            TODO: add search input tied to the <code>query</code> search param.
+          </em>
+        </p>
+        <p>
+          <em>TODO: add pagination</em>
+        </p>
       </div>
     </div>
   );

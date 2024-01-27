@@ -1,8 +1,8 @@
-import { FileRoute } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { useTitle } from "hoofd";
 import { fetchPost } from "../lib/api";
 
-export const Route = new FileRoute('/$slug').createRoute({
+export const Route = createFileRoute('/$slug')({
   component: Product,
   loader: ({ params }) => fetchPost(Number(params.slug)),
 });
